@@ -1,0 +1,53 @@
+============================================================ 
+OCCUPANCY FILE: data\5occupancySensor_MayToDec2024_9MRows.csv
+rows: 9091732
+occupancystatus: {'CurrentlyOccupied': 8405894, 'RecentlyOccupied': 420133, 'NotOccupied': 265705}
+headcount values (top 15): {'2': 2294239, '1': 1941153, '3': 1489709, '4': 919319, '0': 685838, '5': 563823, '6': 352809, '7': 228009, '8': 153330, '9': 106008, '10': 74682, '11': 53934, '12': 40443, '13': 30911, '14': 24212}
+duplicate (space, time, status) rows: 4
+
+Per floorspace (id | events | first | last | max headcount):
+  0f3f37f8-0335-41e0-ae87-a1d677dfc7d7 | 2169461 | 2023-11-23 13:37:32+00:00 | 2026-04-22 13:02:18+00:00 | 40
+  227f1068-9e41-469f-bef0-275f27a0bdba | 1500394 | 2024-03-03 04:06:30+00:00 | 2026-04-22 12:09:42+00:00 | 38
+  3e5a14df-4b14-4ea5-bb9d-46577c6dc9c8 | 1551583 | 2024-04-30 14:00:16+00:00 | 2024-12-30 12:01:56+00:00 | 36
+  941f0352-bb69-47d0-a9c5-ac29eb4f7319 | 1975423 | 2023-11-23 13:36:52+00:00 | 2026-04-22 13:02:38+00:00 | 15
+  cca1ac3e-f81f-4ebb-aa2b-8b0bf3e9e53b | 1894871 | 2024-03-03 04:06:30+00:00 | 2026-04-22 12:54:50+00:00 | 72
+============================================================ 
+ENV FILE: data\5EnvSensor_MayToDec2024_180kRows.csv
+rows: 179447 | unique sensors: 5 | {}
+duplicate (sensorid, time) rows: 136604 (76.1%)
+ingest-minus-measurement lag, days (sampled): median=135.63, p90=273.34, max=382.6
+
+Per sensor (id | rows | unique readings | first | last | median gap min):
+  6012002000227 | 21363 | 1 | 2023-12-11 05:07:53 | 2023-12-11 05:07:53 | nan
+  6012002000241 | 58908 | 2 | 2023-12-11 05:52:45 | 2025-05-19 13:08:04 | 756435.3
+  6012002000326 | 58909 | 29039 | 2023-12-11 05:00:57 | 2026-04-22 13:12:41 | 10.0
+  6012002000777 | 10926 | 1 | 2023-05-05 22:42:45 | 2023-05-05 22:42:45 | nan
+  6012002000869 | 29341 | 13800 | 2024-02-29 06:04:56 | 2024-06-13 17:45:44 | 10.0
+
+Unique readings per measurement month: {'2023-05': 1, '2023-12': 3, '2024-02': 80, '2024-03': 3849, '2024-04': 4000, '2024-05': 4155, '2024-06': 1716, '2025-05': 1, '2025-09': 2633, '2025-10': 4158, '2025-11': 3723, '2025-12': 4194, '2026-01': 4067, '2026-02': 3155, '2026-03': 4194, '2026-04': 2914}
+
+Variable statistics (sampled 1 in 50 rows; non-missing values only):
+  Battery [V]: n=3589 min=4.03 p1=4.03 median=4.19 p99=4.22 max=4.22
+  Carbon dioxide [ppm]: n=3589 min=403.00 p1=419.00 median=520.00 p99=666.00 max=666.00
+  Humidity [HR%]: n=3589 min=17.00 p1=35.00 median=62.00 p99=69.00 max=78.00
+  Formaldehyde [µg/m3]: n=1322 min=1.00 p1=1.00 median=6.00 p99=55.00 max=55.00
+  Pressure [mb]: n=3589 min=989.00 p1=1001.00 median=1012.00 p99=1026.00 max=1028.00
+  Temperature [°C]: n=3589 min=13.30 p1=15.50 median=23.80 p99=28.80 max=35.80
+  Light Volatile Organic Compounds [ppb]: n=3049 min=0.00 p1=0.00 median=7.00 p99=71.00 max=2597.00
+  Particulate matter 1 [µg/m3]: n=3572 min=0.00 p1=0.00 median=3.00 p99=12.00 max=61.00
+  Particulate matter 4 [µg/m3]: n=3572 min=0.00 p1=0.00 median=3.00 p99=16.00 max=72.00
+  Particulate matter 2.5 [µg/m3]: n=3572 min=0.00 p1=0.00 median=3.00 p99=14.00 max=65.00
+  Particulate matter 10 [µg/m3]: n=3572 min=0.00 p1=0.00 median=3.00 p99=16.00 max=74.00
+errorCode occurrences (sampled): {('Formaldehyde', 8): 506, ('Formaldehyde', 4): 52}
+values with NO 'value' field (sampled): {'Formaldehyde': 2267}
+============================================================ 
+MAPPING COVERAGE (xlsx)
+env sensors in data: 5; matched in xlsx: 1
+  env 6012002000869 -> building 60, room G.38, Compactus_upper
+  env sensors NOT in xlsx: ['6012002000227', '6012002000241', '6012002000326', '6012002000777']
+occupancy floorspaces in data: 5; matched in xlsx: 2
+  space cca1ac3e-f81f-4ebb-aa2b-8b0bf3e9e53b -> building 60, room G.20, sensor 8034-2812-bfed, note nan
+  space cca1ac3e-f81f-4ebb-aa2b-8b0bf3e9e53b -> building 60, room G.20, sensor 8034-285a-c064, note nan
+  space 227f1068-9e41-469f-bef0-275f27a0bdba -> building 60, room G.25, sensor 8034-285a-72f0, note 2.4m (Keenan Lab)
+  space 227f1068-9e41-469f-bef0-275f27a0bdba -> building 60, room G.25, sensor 8034-2812-6ebd, note 2.4m (Keenan Lab)
+  spaces NOT in xlsx: ['0f3f37f8-0335-41e0-ae87-a1d677dfc7d7', '3e5a14df-4b14-4ea5-bb9d-46577c6dc9c8', '941f0352-bb69-47d0-a9c5-ac29eb4f7319']
