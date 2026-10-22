@@ -1,12 +1,13 @@
-"""Command line interface: ``python -m occenv <command> --help``.
+"""Command line interface: `python -m occenv <command> --help`.
 
 Commands (run in this order):
-    profile   audit the raw files (read-only)
-    prepare   clean the raw files and write 10-minute tables to ``data/processed``
-    screen    quick sensor-vs-space correlation table
-    diagnose  fair-window, lag, placebo and stability tests for the sensor-to-space mapping
-    train     build features, validate chronologically, compare models
-    benchmark time/profile the baseline vs improved code (performance section)
+
+- `profile`: audit the raw files (read-only)
+- `prepare`: clean the raw files and write 10-minute tables to `data/processed`
+- `screen`: quick sensor-vs-space correlation table
+- `diagnose`: fair-window, lag, placebo and stability tests for the sensor-to-space mapping
+- `train`: build features, validate chronologically, compare models
+- `benchmark`: time and profile the baseline vs improved code (performance section)
 """
 import argparse
 import logging

@@ -3,10 +3,10 @@
 The slowest, most memory-hungry step in the project is the data audit of the 9-million-row
 occupancy file, so that is where baseline and improved implementations are compared:
 
-* BASELINE  :func:`count_duplicates_baseline`: builds one Python string per row and keeps every
+* BASELINE  `count_duplicates_baseline`: builds one Python string per row and keeps every
   string in a ``set``. Simple, but memory grows with every unique row (a Python string object
   costs on the order of 100 bytes).
-* IMPROVED  :func:`count_duplicates_fast`: hashes the key columns in vectorised form to 64-bit
+* IMPROVED  `count_duplicates_fast`: hashes the key columns in vectorised form to 64-bit
   integers and counts repeats with ``numpy.unique`` (8 bytes per row, no Python-level loop).
 
 Expected (and, on a 1M-row synthetic test, observed) trade-off: the improvement mainly saves
@@ -17,7 +17,7 @@ Both must return identical counts (checked by the tests and by the benchmark its
 collisions could in principle make the fast count slightly too high; for n = 9e6 rows and 64-bit
 hashes the expected number of collisions is about n^2 / 2^65, i.e. about 2e-6.
 
-:func:`estimate_costs` gives analytic operation/byte counts so that measured model timings can
+`estimate_costs` gives analytic operation/byte counts so that measured model timings can
 be explained in terms of arithmetic intensity (operations per byte moved).
 """
 import cProfile
@@ -94,7 +94,7 @@ def count_duplicates_baseline(path, nrows=None, chunksize=200_000):
 def count_duplicates_fast(path, nrows=None, chunksize=200_000):
     """IMPROVED: same count as the baseline using vectorised 64-bit row hashes.
 
-    Args and Returns: as :func:`count_duplicates_baseline`.
+    Args and Returns: as `count_duplicates_baseline`.
     """
     hashes, n = [], 0
     dtypes = {"floorspaceid": "category", "occupancystatus": "category"}
@@ -155,7 +155,7 @@ def run_benchmark(occ_path, env_path, nrows=1_000_000, report=None):
        equality check on the results.
     2. ``cProfile`` of ``clean_occupancy`` (on the first ``nrows`` rows) and ``clean_env`` to
        show where cleaning time actually goes.
-    3. Analytic cost estimates for the model families (see :func:`estimate_costs`).
+    3. Analytic cost estimates for the model families (see `estimate_costs`).
 
     Raises:
         AssertionError: If the baseline and improved counts ever disagree.

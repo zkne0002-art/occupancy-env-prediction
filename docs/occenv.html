@@ -29,6 +29,7 @@
                     <li><a href="occenv/config.html">config</a></li>
                     <li><a href="occenv/mapping.html">mapping</a></li>
                     <li><a href="occenv/modelling.html">modelling</a></li>
+                    <li><a href="occenv/performance.html">performance</a></li>
                     <li><a href="occenv/profiling.html">profiling</a></li>
                     <li><a href="occenv/reporting.html">reporting</a></li>
             </ul>
@@ -56,14 +57,18 @@ occenv    </h1>
 <p>Built for the MMA3001 individual project using the Monash Smart Infrastructure
 (MSI) occupancy and environmental sensor extracts.</p>
 
-<p>Modules:
-    * <code><a href="occenv/config.html">occenv.config</a></code>     shared constants (time bin, timezone, variable names, feature sets)
-    * <code><a href="occenv/reporting.html">occenv.reporting</a></code>  small helper that echoes results and saves them to a text file
-    * <code><a href="occenv/profiling.html">occenv.profiling</a></code>  chunked audit of the raw (large) CSV files
-    * <code><a href="occenv/cleaning.html">occenv.cleaning</a></code>   de-duplication, validity filtering and 10-minute regularisation
-    * <code><a href="occenv/mapping.html">occenv.mapping</a></code>    inferring which occupancy space a sensor belongs to
-    * <code><a href="occenv/modelling.html">occenv.modelling</a></code>  features, chronological validation, models and comparisons
-    * <code><a href="occenv/cli.html">occenv.cli</a></code>        command line interface (<code>python -m occenv --help</code>)</p>
+<p>Modules:</p>
+
+<ul>
+<li><code><a href="occenv/config.html">occenv.config</a></code>: shared constants (time bin, timezone, variable names, feature sets)</li>
+<li><code><a href="occenv/reporting.html">occenv.reporting</a></code>: helper that echoes results and saves them to a text file</li>
+<li><code><a href="occenv/profiling.html">occenv.profiling</a></code>: chunked audit of the raw (large) CSV files</li>
+<li><code><a href="occenv/cleaning.html">occenv.cleaning</a></code>: de-duplication, validity filtering and 10-minute regularisation</li>
+<li><code><a href="occenv/mapping.html">occenv.mapping</a></code>: inferring which occupancy space a sensor belongs to</li>
+<li><code><a href="occenv/modelling.html">occenv.modelling</a></code>: features, chronological validation, models and comparisons</li>
+<li><code><a href="occenv/performance.html">occenv.performance</a></code>: timing, profiling and cost model (baseline vs improved code)</li>
+<li><code><a href="occenv/cli.html">occenv.cli</a></code>: command line interface (<code>python -m occenv --help</code>)</li>
+</ul>
 </div>
 
                         <input id="mod-occenv-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
@@ -76,15 +81,18 @@ occenv    </h1>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="sd">(MSI) occupancy and environmental sensor extracts.</span>
 </span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="sd">Modules:</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="sd">    * :mod:`occenv.config`     shared constants (time bin, timezone, variable names, feature sets)</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">    * :mod:`occenv.reporting`  small helper that echoes results and saves them to a text file</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">    * :mod:`occenv.profiling`  chunked audit of the raw (large) CSV files</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">    * :mod:`occenv.cleaning`   de-duplication, validity filtering and 10-minute regularisation</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="sd">    * :mod:`occenv.mapping`    inferring which occupancy space a sensor belongs to</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">    * :mod:`occenv.modelling`  features, chronological validation, models and comparisons</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">    * :mod:`occenv.cli`        command line interface (``python -m occenv --help``)</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">"""</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="n">__version__</span> <span class="o">=</span> <span class="s2">"0.1.0"</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">- `occenv.config`: shared constants (time bin, timezone, variable names, feature sets)</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">- `occenv.reporting`: helper that echoes results and saves them to a text file</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">- `occenv.profiling`: chunked audit of the raw (large) CSV files</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="sd">- `occenv.cleaning`: de-duplication, validity filtering and 10-minute regularisation</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">- `occenv.mapping`: inferring which occupancy space a sensor belongs to</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">- `occenv.modelling`: features, chronological validation, models and comparisons</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">- `occenv.performance`: timing, profiling and cost model (baseline vs improved code)</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="sd">- `occenv.cli`: command line interface (`python -m occenv --help`)</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">"""</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="n">__docformat__</span> <span class="o">=</span> <span class="s2">"google"</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="n">__version__</span> <span class="o">=</span> <span class="s2">"0.1.0"</span>
 </span></pre></div>
 
 

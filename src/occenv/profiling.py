@@ -24,7 +24,7 @@ def profile_occupancy(path, report=None):
 
     Args:
         path: Occupancy CSV (``floorspaceid``, ``headcount``, ``collecteddate``, ...).
-        report: Optional :class:`~occenv.reporting.TextReport` (a console one is made if omitted).
+        report: Optional `occenv.reporting.TextReport` (a console one is made if omitted).
 
     Returns:
         The set of floorspace ids found in the file.
@@ -72,7 +72,7 @@ def profile_env(path, report=None):
 
     Args:
         path: Env CSV (``sensorid``, ``jsondata``, ``createdate``, ...).
-        report: Optional :class:`~occenv.reporting.TextReport`.
+        report: Optional `occenv.reporting.TextReport`.
 
     Returns:
         The set of sensor ids found in the file.
@@ -151,7 +151,7 @@ def check_mapping(xlsx, env_sensors, occ_spaces, report=None):
         xlsx: Path to ``Sensor_ID_and_Locations.xlsx`` (sheets ``ENV`` and ``OCC...``).
         env_sensors: Set of env sensor ids in the data.
         occ_spaces: Set of floorspace ids in the data.
-        report: Optional :class:`~occenv.reporting.TextReport`.
+        report: Optional `occenv.reporting.TextReport`.
 
     If the file does not exist a message is logged and the function returns without raising.
     """

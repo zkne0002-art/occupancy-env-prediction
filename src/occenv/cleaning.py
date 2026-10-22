@@ -2,22 +2,24 @@
 
 Both sources are put on the same regular 10-minute UTC grid so they can be joined.
 
-Environmental data (:func:`clean_env`)
-    * The timestamp inside the JSON (Unix seconds, UTC) is the true measurement time;
-      ``createdate`` is only when the record was ingested.
-    * Exact repeats of (sensorid, measurement time) are removed. In the MSI extract about
-      three quarters of rows are repeats of stale readings.
-    * A value carrying an ``errorCode`` or lacking a ``value`` becomes NaN.
-    * Isolated readings (no neighbour within ``isolation_gap_s``) are treated as stale
-      re-sends and dropped; sensors with fewer than ``min_readings`` readings left are dropped.
-    * Readings are averaged into 10-minute bins; missing bins are kept as NaN.
+**Environmental data** (`clean_env`)
 
-Occupancy data (:func:`clean_occupancy`)
-    * The log is a step function: headcount is held from one event to the next, sampled at
-      1-minute resolution (state at the end of each minute), then aggregated to 10 minutes.
-    * A non-zero headcount not refreshed for ``max_stale_min`` minutes, or any state not
-      refreshed for ``max_gap_h`` hours, is treated as missing (possible sensor outage).
-      A zero headcount may persist (an empty room produces no events).
+- The timestamp inside the JSON (Unix seconds, UTC) is the true measurement time;
+  `createdate` is only when the record was ingested.
+- Exact repeats of (sensorid, measurement time) are removed. In the MSI extract about
+  three quarters of rows are repeats of stale readings.
+- A value carrying an `errorCode` or lacking a `value` becomes NaN.
+- Isolated readings (no neighbour within `isolation_gap_s`) are treated as stale re-sends
+  and dropped; sensors with fewer than `min_readings` readings left are dropped.
+- Readings are averaged into 10-minute bins; missing bins are kept as NaN.
+
+**Occupancy data** (`clean_occupancy`)
+
+- The log is a step function: headcount is held from one event to the next, sampled at
+  1-minute resolution (state at the end of each minute), then aggregated to 10 minutes.
+- A non-zero headcount not refreshed for `max_stale_min` minutes, or any state not
+  refreshed for `max_gap_h` hours, is treated as missing (possible sensor outage).
+  A zero headcount may persist (an empty room produces no events).
 """
 import json
 import logging
@@ -94,7 +96,7 @@ def clean_env(path, min_readings=MIN_READINGS, isolation_gap_s=ISOLATION_GAP_S, 
     Returns:
         ``(table, stats)``. ``table`` has columns ``sensorid``, ``time_utc`` (tz-aware UTC,
         regular 10-minute steps per sensor) and one column per variable in
-        :data:`occenv.config.VAR_NAMES`; empty bins are NaN. ``stats`` is a dict of counts
+        `occenv.config.VAR_NAMES`; empty bins are NaN. ``stats`` is a dict of counts
         describing what was removed, plus ``sensors_kept`` and ``sensors_dropped``.
 
     Raises:

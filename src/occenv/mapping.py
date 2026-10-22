@@ -6,8 +6,8 @@ issue), so the mapping is treated as part of the problem and estimated from the 
 Evidence used (all on residuals after removing the mean hour-of-week profile, because any two
 spaces used on weekdays correlate raw simply through the working week):
 
-* :func:`screen_pairs`   quick correlation table for every sensor/space pair.
-* :func:`diagnose_sensor` fair common window, lag scan, week-shift placebo test, stability
+* `screen_pairs`   quick correlation table for every sensor/space pair.
+* `diagnose_sensor` fair common window, lag scan, week-shift placebo test, stability
   across window halves, and similarity between spaces.
 """
 import warnings
@@ -150,7 +150,7 @@ def diagnose_sensor(env_s, occ_w, min_pairs=MIN_PAIRS):
 
 
 def format_diagnosis(sid, res):
-    """Format the result of :func:`diagnose_sensor` as text (``res`` may be ``None``)."""
+    """Format the result of `diagnose_sensor` as text (``res`` may be ``None``)."""
     if res is None:
         return f"SENSOR {sid[-6:]}: no common window across all spaces.\n"
     fmt = lambda x: f"{x:.2f}"
@@ -162,7 +162,7 @@ def format_diagnosis(sid, res):
 
 
 def diagnose_all(env, occ, end=None, exclude=(), min_pairs=MIN_PAIRS):
-    """Run :func:`diagnose_sensor` for every sensor and return the combined text.
+    """Run `diagnose_sensor` for every sensor and return the combined text.
 
     Args:
         env: Cleaned env table.

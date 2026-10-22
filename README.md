@@ -83,7 +83,7 @@ python -m occenv train --sensor 326 --spaces 0f3f37f8 941f0352 --thr 1 --out res
 
 ```bash
 pytest -v --junitxml=reports/test_report.xml        # test report (XML) ; add --cov=occenv for coverage
-pdoc -o docs occenv                                  # HTML documentation of the source code
+pdoc --docformat google -o docs occenv                                  # HTML documentation of the source code
 ```
 
 The tests use small synthetic data in the MSI format and include hand-calculated checks of the

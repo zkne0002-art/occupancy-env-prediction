@@ -1,16 +1,17 @@
 """Predict zone occupancy from environmental signals and test whether they beat the schedule.
 
-Design
-    * One env sensor and a ZONE (sum of headcount over chosen spaces) on their common window.
-    * Target ``occupied`` = zone headcount >= ``thr`` (10-minute time-weighted mean headcount).
-    * Features: schedule (hour, day of week, hour of week) and environment (CO2, temperature,
-      humidity, PM2.5, plus rate of change, 1 h mean, height above the 24 h minimum). Every
-      engineered feature looks only at the PAST, so nothing leaks from the future.
-    * Validation: chronological split (first 70 % train, 1-day gap, last 30 % test); models are
-      compared with forward-chaining CV inside the training period; the test set is scored once.
-    * Models: schedule lookup (baseline), logistic regression and gradient boosting, each with
-      schedule only and schedule + env. The paired difference between the two is the evidence
-      for what the environmental data adds beyond the clock.
+**Design**
+
+- One env sensor and a ZONE (sum of headcount over the chosen spaces) on their common window.
+- Target `occupied` = zone headcount >= `thr` (10-minute time-weighted mean headcount).
+- Features: schedule (hour, day of week, hour of week) and environment (CO2, temperature,
+  humidity, PM2.5, plus rate of change, 1 h mean, height above the 24 h minimum). Every
+  engineered feature looks only at the PAST, so nothing leaks from the future.
+- Validation: chronological split (first 70 % train, 1-day gap, last 30 % test); models are
+  compared with forward-chaining CV inside the training period; the test set is scored once.
+- Models: schedule lookup (baseline), logistic regression and gradient boosting, each with
+  schedule only and schedule + env. The paired difference between the two is the evidence
+  for what the environmental data adds beyond the clock.
 """
 import time
 
@@ -274,7 +275,7 @@ def run_experiment(env, occ, sensor, spaces, thr=1.0, report=None, n_boot=1000, 
         sensor: Suffix of the env sensor id.
         spaces: Floorspace id prefixes forming the zone.
         thr: Zone headcount threshold for ``occupied``.
-        report: Optional :class:`~occenv.reporting.TextReport` that receives all output.
+        report: Optional `occenv.reporting.TextReport` that receives all output.
         n_boot: Bootstrap resamples for the paired AUC differences.
         n_splits: Forward-chaining CV folds.
 

@@ -102,7 +102,7 @@ and memory hungry on the 9-million-row occupancy file.</p>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="sd">    Args:</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="sd">        path: Occupancy CSV (``floorspaceid``, ``headcount``, ``collecteddate``, ...).</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="sd">        report: Optional :class:`~occenv.reporting.TextReport` (a console one is made if omitted).</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="sd">        report: Optional `occenv.reporting.TextReport` (a console one is made if omitted).</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>
 </span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="sd">    Returns:</span>
 </span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a><span class="sd">        The set of floorspace ids found in the file.</span>
@@ -150,7 +150,7 @@ and memory hungry on the 9-million-row occupancy file.</p>
 </span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>
 </span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a><span class="sd">    Args:</span>
 </span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a><span class="sd">        path: Env CSV (``sensorid``, ``jsondata``, ``createdate``, ...).</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a><span class="sd">        report: Optional :class:`~occenv.reporting.TextReport`.</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a><span class="sd">        report: Optional `occenv.reporting.TextReport`.</span>
 </span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>
 </span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="sd">    Returns:</span>
 </span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a><span class="sd">        The set of sensor ids found in the file.</span>
@@ -229,7 +229,7 @@ and memory hungry on the 9-million-row occupancy file.</p>
 </span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="sd">        xlsx: Path to ``Sensor_ID_and_Locations.xlsx`` (sheets ``ENV`` and ``OCC...``).</span>
 </span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a><span class="sd">        env_sensors: Set of env sensor ids in the data.</span>
 </span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="sd">        occ_spaces: Set of floorspace ids in the data.</span>
-</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a><span class="sd">        report: Optional :class:`~occenv.reporting.TextReport`.</span>
+</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a><span class="sd">        report: Optional `occenv.reporting.TextReport`.</span>
 </span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>
 </span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a><span class="sd">    If the file does not exist a message is logged and the function returns without raising.</span>
 </span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a><span class="sd">    """</span>
@@ -310,7 +310,7 @@ and memory hungry on the 9-million-row occupancy file.</p>
 </span><span id="profile_occupancy-25"><a href="#profile_occupancy-25"><span class="linenos">25</span></a>
 </span><span id="profile_occupancy-26"><a href="#profile_occupancy-26"><span class="linenos">26</span></a><span class="sd">    Args:</span>
 </span><span id="profile_occupancy-27"><a href="#profile_occupancy-27"><span class="linenos">27</span></a><span class="sd">        path: Occupancy CSV (``floorspaceid``, ``headcount``, ``collecteddate``, ...).</span>
-</span><span id="profile_occupancy-28"><a href="#profile_occupancy-28"><span class="linenos">28</span></a><span class="sd">        report: Optional :class:`~occenv.reporting.TextReport` (a console one is made if omitted).</span>
+</span><span id="profile_occupancy-28"><a href="#profile_occupancy-28"><span class="linenos">28</span></a><span class="sd">        report: Optional `occenv.reporting.TextReport` (a console one is made if omitted).</span>
 </span><span id="profile_occupancy-29"><a href="#profile_occupancy-29"><span class="linenos">29</span></a>
 </span><span id="profile_occupancy-30"><a href="#profile_occupancy-30"><span class="linenos">30</span></a><span class="sd">    Returns:</span>
 </span><span id="profile_occupancy-31"><a href="#profile_occupancy-31"><span class="linenos">31</span></a><span class="sd">        The set of floorspace ids found in the file.</span>
@@ -356,12 +356,18 @@ and memory hungry on the 9-million-row occupancy file.</p>
 
             <div class="docstring"><p>Summarise the occupancy event log.</p>
 
-<p>Args:
-    path: Occupancy CSV (<code>floorspaceid</code>, <code>headcount</code>, <code>collecteddate</code>, ...).
-    report: Optional <code>~<a href="reporting.html#TextReport">occenv.reporting.TextReport</a></code> (a console one is made if omitted).</p>
+<h6 id="arguments">Arguments:</h6>
 
-<p>Returns:
-    The set of floorspace ids found in the file.</p>
+<ul>
+<li><strong>path:</strong>  Occupancy CSV (<code>floorspaceid</code>, <code>headcount</code>, <code>collecteddate</code>, ...).</li>
+<li><strong>report:</strong>  Optional <code><a href="reporting.html#TextReport">occenv.reporting.TextReport</a></code> (a console one is made if omitted).</li>
+</ul>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p>The set of floorspace ids found in the file.</p>
+</blockquote>
 </div>
 
 
@@ -382,7 +388,7 @@ and memory hungry on the 9-million-row occupancy file.</p>
 </span><span id="profile_env-73"><a href="#profile_env-73"><span class="linenos"> 73</span></a>
 </span><span id="profile_env-74"><a href="#profile_env-74"><span class="linenos"> 74</span></a><span class="sd">    Args:</span>
 </span><span id="profile_env-75"><a href="#profile_env-75"><span class="linenos"> 75</span></a><span class="sd">        path: Env CSV (``sensorid``, ``jsondata``, ``createdate``, ...).</span>
-</span><span id="profile_env-76"><a href="#profile_env-76"><span class="linenos"> 76</span></a><span class="sd">        report: Optional :class:`~occenv.reporting.TextReport`.</span>
+</span><span id="profile_env-76"><a href="#profile_env-76"><span class="linenos"> 76</span></a><span class="sd">        report: Optional `occenv.reporting.TextReport`.</span>
 </span><span id="profile_env-77"><a href="#profile_env-77"><span class="linenos"> 77</span></a>
 </span><span id="profile_env-78"><a href="#profile_env-78"><span class="linenos"> 78</span></a><span class="sd">    Returns:</span>
 </span><span id="profile_env-79"><a href="#profile_env-79"><span class="linenos"> 79</span></a><span class="sd">        The set of sensor ids found in the file.</span>
@@ -457,12 +463,18 @@ and memory hungry on the 9-million-row occupancy file.</p>
 
             <div class="docstring"><p>Summarise the environmental sensor file.</p>
 
-<p>Args:
-    path: Env CSV (<code>sensorid</code>, <code>jsondata</code>, <code>createdate</code>, ...).
-    report: Optional <code>~<a href="reporting.html#TextReport">occenv.reporting.TextReport</a></code>.</p>
+<h6 id="arguments">Arguments:</h6>
 
-<p>Returns:
-    The set of sensor ids found in the file.</p>
+<ul>
+<li><strong>path:</strong>  Env CSV (<code>sensorid</code>, <code>jsondata</code>, <code>createdate</code>, ...).</li>
+<li><strong>report:</strong>  Optional <code><a href="reporting.html#TextReport">occenv.reporting.TextReport</a></code>.</li>
+</ul>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p>The set of sensor ids found in the file.</p>
+</blockquote>
 </div>
 
 
@@ -485,7 +497,7 @@ and memory hungry on the 9-million-row occupancy file.</p>
 </span><span id="check_mapping-152"><a href="#check_mapping-152"><span class="linenos">152</span></a><span class="sd">        xlsx: Path to ``Sensor_ID_and_Locations.xlsx`` (sheets ``ENV`` and ``OCC...``).</span>
 </span><span id="check_mapping-153"><a href="#check_mapping-153"><span class="linenos">153</span></a><span class="sd">        env_sensors: Set of env sensor ids in the data.</span>
 </span><span id="check_mapping-154"><a href="#check_mapping-154"><span class="linenos">154</span></a><span class="sd">        occ_spaces: Set of floorspace ids in the data.</span>
-</span><span id="check_mapping-155"><a href="#check_mapping-155"><span class="linenos">155</span></a><span class="sd">        report: Optional :class:`~occenv.reporting.TextReport`.</span>
+</span><span id="check_mapping-155"><a href="#check_mapping-155"><span class="linenos">155</span></a><span class="sd">        report: Optional `occenv.reporting.TextReport`.</span>
 </span><span id="check_mapping-156"><a href="#check_mapping-156"><span class="linenos">156</span></a>
 </span><span id="check_mapping-157"><a href="#check_mapping-157"><span class="linenos">157</span></a><span class="sd">    If the file does not exist a message is logged and the function returns without raising.</span>
 </span><span id="check_mapping-158"><a href="#check_mapping-158"><span class="linenos">158</span></a><span class="sd">    """</span>
@@ -515,11 +527,14 @@ and memory hungry on the 9-million-row occupancy file.</p>
 
             <div class="docstring"><p>Report how many sensors/spaces in the data are covered by the Excel mapping.</p>
 
-<p>Args:
-    xlsx: Path to <code>Sensor_ID_and_Locations.xlsx</code> (sheets <code>ENV</code> and <code>OCC...</code>).
-    env_sensors: Set of env sensor ids in the data.
-    occ_spaces: Set of floorspace ids in the data.
-    report: Optional <code>~<a href="reporting.html#TextReport">occenv.reporting.TextReport</a></code>.</p>
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong>xlsx:</strong>  Path to <code>Sensor_ID_and_Locations.xlsx</code> (sheets <code>ENV</code> and <code>OCC...</code>).</li>
+<li><strong>env_sensors:</strong>  Set of env sensor ids in the data.</li>
+<li><strong>occ_spaces:</strong>  Set of floorspace ids in the data.</li>
+<li><strong>report:</strong>  Optional <code><a href="reporting.html#TextReport">occenv.reporting.TextReport</a></code>.</li>
+</ul>
 
 <p>If the file does not exist a message is logged and the function returns without raising.</p>
 </div>

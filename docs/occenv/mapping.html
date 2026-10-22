@@ -91,8 +91,8 @@ issue), so the mapping is treated as part of the problem and estimated from the 
 spaces used on weekdays correlate raw simply through the working week):</p>
 
 <ul>
-<li><code><a href="#screen_pairs">screen_pairs()</a></code>   quick correlation table for every sensor/space pair.</li>
-<li><code><a href="#diagnose_sensor">diagnose_sensor()</a></code> fair common window, lag scan, week-shift placebo test, stability
+<li><code><a href="#screen_pairs">screen_pairs</a></code>   quick correlation table for every sensor/space pair.</li>
+<li><code><a href="#diagnose_sensor">diagnose_sensor</a></code> fair common window, lag scan, week-shift placebo test, stability
 across window halves, and similarity between spaces.</li>
 </ul>
 </div>
@@ -109,8 +109,8 @@ across window halves, and similarity between spaces.</li>
 </span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="sd">Evidence used (all on residuals after removing the mean hour-of-week profile, because any two</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="sd">spaces used on weekdays correlate raw simply through the working week):</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a>
-</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="sd">* :func:`screen_pairs`   quick correlation table for every sensor/space pair.</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="sd">* :func:`diagnose_sensor` fair common window, lag scan, week-shift placebo test, stability</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="sd">* `screen_pairs`   quick correlation table for every sensor/space pair.</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="sd">* `diagnose_sensor` fair common window, lag scan, week-shift placebo test, stability</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="sd">  across window halves, and similarity between spaces.</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="sd">"""</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
@@ -253,7 +253,7 @@ across window halves, and similarity between spaces.</li>
 </span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>
 </span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a>
 </span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a><span class="k">def</span><span class="w"> </span><span class="nf">format_diagnosis</span><span class="p">(</span><span class="n">sid</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
-</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="w">    </span><span class="sd">"""Format the result of :func:`diagnose_sensor` as text (``res`` may be ``None``)."""</span>
+</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="w">    </span><span class="sd">"""Format the result of `diagnose_sensor` as text (``res`` may be ``None``)."""</span>
 </span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>    <span class="k">if</span> <span class="n">res</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">"SENSOR </span><span class="si">{</span><span class="n">sid</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">:]</span><span class="si">}</span><span class="s2">: no common window across all spaces.</span><span class="se">\n</span><span class="s2">"</span>
 </span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>    <span class="n">fmt</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">x</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span>
@@ -265,7 +265,7 @@ across window halves, and similarity between spaces.</li>
 </span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a>
 </span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>
 </span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a><span class="k">def</span><span class="w"> </span><span class="nf">diagnose_all</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">occ</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="p">(),</span> <span class="n">min_pairs</span><span class="o">=</span><span class="n">MIN_PAIRS</span><span class="p">):</span>
-</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a><span class="w">    </span><span class="sd">"""Run :func:`diagnose_sensor` for every sensor and return the combined text.</span>
+</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a><span class="w">    </span><span class="sd">"""Run `diagnose_sensor` for every sensor and return the combined text.</span>
 </span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>
 </span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a><span class="sd">    Args:</span>
 </span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a><span class="sd">        env: Cleaned env table.</span>
@@ -403,12 +403,18 @@ across window halves, and similarity between spaces.</li>
 
             <div class="docstring"><p>Subtract the mean hour-of-week profile (local time) from every column.</p>
 
-<p>Args:
-    df: DataFrame with a tz-aware DatetimeIndex.</p>
+<h6 id="arguments">Arguments:</h6>
 
-<p>Returns:
-    DataFrame of residuals, same shape. A series that is purely periodic by hour of week
-    becomes zero.</p>
+<ul>
+<li><strong>df:</strong>  DataFrame with a tz-aware DatetimeIndex.</li>
+</ul>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p>DataFrame of residuals, same shape. A series that is purely periodic by hour of week
+  becomes zero.</p>
+</blockquote>
 </div>
 
 
@@ -493,15 +499,21 @@ across window halves, and similarity between spaces.</li>
 
             <div class="docstring"><p>Correlate every environmental variable with headcount for every sensor/space pair.</p>
 
-<p>Args:
-    env: Cleaned env table (<code>sensorid</code>, <code>time_utc</code>, variables).
-    occ: Cleaned occupancy table (<code>floorspaceid</code>, <code>time_utc</code>, <code>mean_headcount</code>).
-    variables: Env columns to correlate.
-    min_overlap: Pairs with fewer overlapping valid CO2/headcount bins are skipped.</p>
+<h6 id="arguments">Arguments:</h6>
 
-<p>Returns:
-    DataFrame, one row per pair, with raw and <code>_resid</code> correlations, sorted per sensor by
-    absolute residual CO2 correlation. Empty if no pair overlaps enough.</p>
+<ul>
+<li><strong>env:</strong>  Cleaned env table (<code>sensorid</code>, <code>time_utc</code>, variables).</li>
+<li><strong>occ:</strong>  Cleaned occupancy table (<code>floorspaceid</code>, <code>time_utc</code>, <code>mean_headcount</code>).</li>
+<li><strong>variables:</strong>  Env columns to correlate.</li>
+<li><strong>min_overlap:</strong>  Pairs with fewer overlapping valid CO2/headcount bins are skipped.</li>
+</ul>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p>DataFrame, one row per pair, with raw and <code>_resid</code> correlations, sorted per sensor by
+  absolute residual CO2 correlation. Empty if no pair overlaps enough.</p>
+</blockquote>
 </div>
 
 
@@ -577,16 +589,22 @@ across window halves, and similarity between spaces.</li>
 <p>All spaces are compared over the SAME window (intersection of every space's coverage and
 the sensor's CO2 coverage) so their correlations are directly comparable.</p>
 
-<p>Args:
-    env_s: DataFrame indexed by <code>time_utc</code> with a <code>co2_ppm</code> column.
-    occ_w: Wide DataFrame (index <code>time_utc</code>, one column per space) of mean headcount.
-    min_pairs: Minimum valid pairs for any correlation to be reported.</p>
+<h6 id="arguments">Arguments:</h6>
 
-<p>Returns:
-    <code>None</code> if there is no common window. Otherwise a dict with <code>start</code>, <code>end</code>,
-    <code>days</code>, <code>bins</code>, <code>table</code> (per space: <code>resid</code> correlation at lag 0, best lag in
-    minutes, placebo mean/sd, <code>z</code>, and correlation in each <code>half1</code>/<code>half2</code>) and
-    <code>space_corr</code> (residual headcount correlation between spaces).</p>
+<ul>
+<li><strong>env_s:</strong>  DataFrame indexed by <code>time_utc</code> with a <code>co2_ppm</code> column.</li>
+<li><strong>occ_w:</strong>  Wide DataFrame (index <code>time_utc</code>, one column per space) of mean headcount.</li>
+<li><strong>min_pairs:</strong>  Minimum valid pairs for any correlation to be reported.</li>
+</ul>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p><code>None</code> if there is no common window. Otherwise a dict with <code>start</code>, <code>end</code>,
+  <code>days</code>, <code>bins</code>, <code>table</code> (per space: <code>resid</code> correlation at lag 0, best lag in
+  minutes, placebo mean/sd, <code>z</code>, and correlation in each <code>half1</code>/<code>half2</code>) and
+  <code>space_corr</code> (residual headcount correlation between spaces).</p>
+</blockquote>
 </div>
 
 
@@ -603,7 +621,7 @@ the sensor's CO2 coverage) so their correlations are directly comparable.</p>
     </div>
     <a class="headerlink" href="#format_diagnosis"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="format_diagnosis-153"><a href="#format_diagnosis-153"><span class="linenos">153</span></a><span class="k">def</span><span class="w"> </span><span class="nf">format_diagnosis</span><span class="p">(</span><span class="n">sid</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
-</span><span id="format_diagnosis-154"><a href="#format_diagnosis-154"><span class="linenos">154</span></a><span class="w">    </span><span class="sd">"""Format the result of :func:`diagnose_sensor` as text (``res`` may be ``None``)."""</span>
+</span><span id="format_diagnosis-154"><a href="#format_diagnosis-154"><span class="linenos">154</span></a><span class="w">    </span><span class="sd">"""Format the result of `diagnose_sensor` as text (``res`` may be ``None``)."""</span>
 </span><span id="format_diagnosis-155"><a href="#format_diagnosis-155"><span class="linenos">155</span></a>    <span class="k">if</span> <span class="n">res</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="format_diagnosis-156"><a href="#format_diagnosis-156"><span class="linenos">156</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">"SENSOR </span><span class="si">{</span><span class="n">sid</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">:]</span><span class="si">}</span><span class="s2">: no common window across all spaces.</span><span class="se">\n</span><span class="s2">"</span>
 </span><span id="format_diagnosis-157"><a href="#format_diagnosis-157"><span class="linenos">157</span></a>    <span class="n">fmt</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">x</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span>
@@ -615,7 +633,7 @@ the sensor's CO2 coverage) so their correlations are directly comparable.</p>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Format the result of <code><a href="#diagnose_sensor">diagnose_sensor()</a></code> as text (<code>res</code> may be <code>None</code>).</p>
+            <div class="docstring"><p>Format the result of <code><a href="#diagnose_sensor">diagnose_sensor</a></code> as text (<code>res</code> may be <code>None</code>).</p>
 </div>
 
 
@@ -632,7 +650,7 @@ the sensor's CO2 coverage) so their correlations are directly comparable.</p>
     </div>
     <a class="headerlink" href="#diagnose_all"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="diagnose_all-165"><a href="#diagnose_all-165"><span class="linenos">165</span></a><span class="k">def</span><span class="w"> </span><span class="nf">diagnose_all</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">occ</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="p">(),</span> <span class="n">min_pairs</span><span class="o">=</span><span class="n">MIN_PAIRS</span><span class="p">):</span>
-</span><span id="diagnose_all-166"><a href="#diagnose_all-166"><span class="linenos">166</span></a><span class="w">    </span><span class="sd">"""Run :func:`diagnose_sensor` for every sensor and return the combined text.</span>
+</span><span id="diagnose_all-166"><a href="#diagnose_all-166"><span class="linenos">166</span></a><span class="w">    </span><span class="sd">"""Run `diagnose_sensor` for every sensor and return the combined text.</span>
 </span><span id="diagnose_all-167"><a href="#diagnose_all-167"><span class="linenos">167</span></a>
 </span><span id="diagnose_all-168"><a href="#diagnose_all-168"><span class="linenos">168</span></a><span class="sd">    Args:</span>
 </span><span id="diagnose_all-169"><a href="#diagnose_all-169"><span class="linenos">169</span></a><span class="sd">        env: Cleaned env table.</span>
@@ -668,18 +686,24 @@ the sensor's CO2 coverage) so their correlations are directly comparable.</p>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Run <code><a href="#diagnose_sensor">diagnose_sensor()</a></code> for every sensor and return the combined text.</p>
+            <div class="docstring"><p>Run <code><a href="#diagnose_sensor">diagnose_sensor</a></code> for every sensor and return the combined text.</p>
 
-<p>Args:
-    env: Cleaned env table.
-    occ: Cleaned occupancy table.
-    end: Optional UTC date/time; only data BEFORE it is used (so the mapping choice
-        cannot see a later test period).
-    exclude: Space id prefixes (8 characters) to leave out.
-    min_pairs: Minimum valid pairs for a correlation.</p>
+<h6 id="arguments">Arguments:</h6>
 
-<p>Returns:
-    Multi-line text report.</p>
+<ul>
+<li><strong>env:</strong>  Cleaned env table.</li>
+<li><strong>occ:</strong>  Cleaned occupancy table.</li>
+<li><strong>end:</strong>  Optional UTC date/time; only data BEFORE it is used (so the mapping choice
+cannot see a later test period).</li>
+<li><strong>exclude:</strong>  Space id prefixes (8 characters) to leave out.</li>
+<li><strong>min_pairs:</strong>  Minimum valid pairs for a correlation.</li>
+</ul>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p>Multi-line text report.</p>
+</blockquote>
 </div>
 
 

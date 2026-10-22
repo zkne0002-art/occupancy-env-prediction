@@ -69,14 +69,17 @@
 
                         <div class="docstring"><p>Shared constants.</p>
 
-<p>Attributes:
-    BIN: Pandas frequency string of the common time grid (10 minutes).
-    TZ: Local timezone used for hour-of-day / day-of-week features.
-    VAR_NAMES: Map from the raw sensor variable names to short column names.
-    ENV_BASE: Raw environmental model features.
-    ENV_ENG: Engineered environmental features (rates of change and rolling statistics).
-    ENV_ALL: <code>ENV_BASE + ENV_ENG</code>.
-    ENV_CO2: CO2-only feature subset (drops variables dominated by weather).</p>
+<h6 id="attributes">Attributes:</h6>
+
+<ul>
+<li><strong>BIN:</strong>  Pandas frequency string of the common time grid (10 minutes).</li>
+<li><strong>TZ:</strong>  Local timezone used for hour-of-day / day-of-week features.</li>
+<li><strong>VAR_NAMES:</strong>  Map from the raw sensor variable names to short column names.</li>
+<li><strong>ENV_BASE:</strong>  Raw environmental model features.</li>
+<li><strong>ENV_ENG:</strong>  Engineered environmental features (rates of change and rolling statistics).</li>
+<li><strong>ENV_ALL:</strong>  <code>ENV_BASE + ENV_ENG</code>.</li>
+<li><strong>ENV_CO2:</strong>  CO2-only feature subset (drops variables dominated by weather).</li>
+</ul>
 </div>
 
                         <input id="mod-config-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
