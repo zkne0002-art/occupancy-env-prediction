@@ -1,0 +1,15 @@
+# Raw and processed data are NOT committed (ownership / privacy / size)
+data/*
+!data/README.md
+*.csv
+*.csv.gz
+*.xlsx
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+.coverage
+.venv/
+venv/

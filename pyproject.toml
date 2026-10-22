@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "occenv"
+version = "0.1.0"
+description = "Predicting zone occupancy from environmental sensor data (MMA3001 project, Monash Smart Infrastructure data)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+dependencies = ["numpy", "pandas", "scikit-learn", "openpyxl"]
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-cov", "pdoc"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "tests"]
