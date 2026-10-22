@@ -1,0 +1,61 @@
+============================================================ 
+1. DUPLICATE COUNTING: baseline (set of strings) vs improved (vectorised hashes)
+   rows  duplicates  base_s  fast_s  speedup  base_MB  fast_MB  mem_ratio
+ 500000           1    0.90    0.74     1.22   101.05    40.13       2.52
+1000000           1    1.66    1.46     1.13   199.44    44.54       4.48
+2000000           1    3.33    2.88     1.15   360.60    79.34       4.54
+(identical duplicate counts confirmed at every size)
+
+============================================================
+2. cProfile of clean_occupancy on the first 2000000 rows
+         131596 function calls (127739 primitive calls) in 11.901 seconds
+
+   Ordered by: cumulative time
+   List reduced from 1508 to 12 due to restriction <12>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.051    0.051   11.901   11.901 C:\Users\Ziggy\Downloads\MMA3001 Project\occupancy-env-prediction\src\occenv\cleaning.py:162(clean_occupancy)
+        1    0.000    0.000    8.909    8.909 C:\Users\Ziggy\Downloads\MMA3001 Project\occupancy-env-prediction\.venv\lib\site-packages\pandas\core\tools\datetimes.py:678(to_datetime)
+        1    0.001    0.001    8.906    8.906 C:\Users\Ziggy\Downloads\MMA3001 Project\occupancy-env-prediction\.venv\lib\site-packages\pandas\core\tools\datetimes.py:316(_convert_listlike_datetimes)
+        1    8.898    8.898    8.901    8.901 C:\Users\Ziggy\Downloads\MMA3001 Project\occupancy-env-prediction\.venv\lib\site-packages\pandas\core\tools\datetimes.py:458(_array_strptime_with_fallback)
+        2    0.000    0.000    2.283    1.141 C:\Users\Ziggy\Downloads\MMA3001 Project\occupancy-env-prediction\.venv\lib\site-packages\pandas\io\parsers\readers.py:868(read_csv)
+        2    0.010    0.005    2.283    1.141 C:\Users\Ziggy\Downloads\MMA3001 Project\occupancy-env-prediction\.venv\lib\site-packages\pandas\io\parsers\readers.py:583(_read)
+        2    0.000    0.000    2.261    1.130 C:\Users\Ziggy\Downloads\MMA3001 Project\occupancy-env-prediction\.venv\lib\site-packages\pandas\io\parsers\readers.py:1907(read)
+        2    2.170    1.085    2.242    1.121 C:\Users\Ziggy\Downloads\MMA3001 Project\occupancy-env-prediction\.venv\lib\site-packages\pandas\io\parsers\c_parser_wrapper.py:222(read)
+       30    0.000    0.000    0.245    0.008 C:\Users\Ziggy\Downloads\MMA3001 Project\occupancy-env-prediction\.venv\lib\site-packages\pandas\core\resample.py:1743(_downsample)
+       65    0.001    0.000    0.125    0.002 C:\Users\Ziggy\Downloads\MMA3001 Project\occupancy-env-prediction\.venv\lib\site-packages\pandas\core\groupby\ops.py:1111(groupings)
+      122    0.000    0.000    0.115    0.001 C:\Users\Ziggy\Downloads\MMA3001 Project\occupancy-env-prediction\.venv\lib\site-packages\pandas\core\algorithms.py:1131(take)
+       79    0.000    0.000    0.107    0.001 C:\Users\Ziggy\Downloads\MMA3001 Project\occupancy-env-prediction\.venv\lib\site-packages\pandas\core\arrays\_mixins.py:157(take)
+
+
+
+============================================================ 
+3. cProfile of clean_env (whole env file)
+         10028180 function calls (10027756 primitive calls) in 10.162 seconds
+
+   Ordered by: cumulative time
+   List reduced from 1081 to 12 due to restriction <12>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.533    0.533   10.162   10.162 C:\Users\Ziggy\Downloads\MMA3001 Project\occupancy-env-prediction\src\occenv\cleaning.py:85(clean_env)
+   179447    2.256    0.000    7.082    0.000 C:\Users\Ziggy\Downloads\MMA3001 Project\occupancy-env-prediction\src\occenv\cleaning.py:48(parse_env_json)
+   179447    0.202    0.000    4.040    0.000 C:\Users\Ziggy\AppData\Local\Programs\Python\Python310\lib\json\__init__.py:299(loads)
+   179447    0.326    0.000    3.784    0.000 C:\Users\Ziggy\AppData\Local\Programs\Python\Python310\lib\json\decoder.py:332(decode)
+   179447    3.240    0.000    3.240    0.000 C:\Users\Ziggy\AppData\Local\Programs\Python\Python310\lib\json\decoder.py:343(raw_decode)
+        4    0.000    0.000    2.349    0.587 C:\Users\Ziggy\Downloads\MMA3001 Project\occupancy-env-prediction\.venv\lib\site-packages\pandas\io\parsers\readers.py:1907(read)
+        3    0.000    0.000    2.345    0.782 C:\Users\Ziggy\Downloads\MMA3001 Project\occupancy-env-prediction\.venv\lib\site-packages\pandas\io\parsers\readers.py:1841(__next__)
+        3    0.000    0.000    2.345    0.782 C:\Users\Ziggy\Downloads\MMA3001 Project\occupancy-env-prediction\.venv\lib\site-packages\pandas\io\parsers\readers.py:1978(get_chunk)
+        4    2.198    0.550    2.342    0.586 C:\Users\Ziggy\Downloads\MMA3001 Project\occupancy-env-prediction\.venv\lib\site-packages\pandas\io\parsers\c_parser_wrapper.py:222(read)
+  7734559    0.770    0.000    0.770    0.000 {method 'get' of 'dict' objects}
+   358897    0.152    0.000    0.152    0.000 {method 'match' of 're.Pattern' objects}
+     2104    0.002    0.000    0.138    0.000 C:\Users\Ziggy\AppData\Local\Programs\Python\Python310\lib\codecs.py:319(decode)
+
+
+
+============================================================ 
+4. Analytic cost estimates (n_train=8542, n_test=3715 as in the thr=1 run)
+         stage       ops     bytes  ops_per_byte
+    logreg fit  30751200 123004800          0.25
+logreg predict    141170    267480          0.53
+       hgb fit 155288000  92253600          1.68
+   hgb predict   2229000  17832000          0.12
