@@ -174,6 +174,7 @@ def clean_env(path, min_readings=MIN_READINGS, isolation_gap_s=ISOLATION_GAP_S, 
             df[col] = np.nan
     stats["unique readings"] = len(df)
     sensors_before = set(df["sensorid"])
+    unique_per_sensor = df.groupby("sensorid").size().to_dict()
 
     g = df.groupby("sensorid")["time"]
     keep = (g.diff() <= isolation_gap_s) | (-g.diff(-1) <= isolation_gap_s)
@@ -184,6 +185,7 @@ def clean_env(path, min_readings=MIN_READINGS, isolation_gap_s=ISOLATION_GAP_S, 
     if df.empty:
         raise ValueError(f"{path}: no sensor has at least {min_readings} usable readings")
     out_stats = dict(stats)
+    out_stats["unique_per_sensor"] = unique_per_sensor
     out_stats["sensors_kept"] = sorted(set(df["sensorid"]))
     out_stats["sensors_dropped"] = sorted(sensors_before - set(df["sensorid"]))
     for k, v in out_stats.items():

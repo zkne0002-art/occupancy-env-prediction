@@ -8,6 +8,7 @@ Commands (run in this order):
 - `diagnose`: fair-window, lag, placebo and stability tests for the sensor-to-space mapping
 - `train`: build features, validate chronologically, compare models
 - `benchmark`: time and profile the baseline vs improved code (performance section)
+- `figures`: regenerate every figure used in the report
 """
 import argparse
 import logging
@@ -16,7 +17,7 @@ import sys
 
 import pandas as pd
 
-from . import cleaning, mapping, modelling, performance, profiling
+from . import cleaning, figures, mapping, modelling, performance, profiling
 from .reporting import TextReport
 
 
@@ -88,6 +89,18 @@ def cmd_benchmark(a):
     rep.save(a.out)
 
 
+def cmd_figures(a):
+    """Re-run the analyses and write the report figures into ``--out``."""
+    written = figures.make_all(a.dir, a.out, env_raw=a.env, occ_raw=a.occ, sensor=a.sensor,
+                               spaces=a.spaces, control=None if a.no_control else a.control,
+                               mapping_end=a.mapping_end, mapping_exclude=a.mapping_exclude,
+                               thresholds=a.thr, n_boot=a.n_boot)
+    for path in written:
+        print("wrote", path)
+    if not (a.occ and a.env):
+        print("note: figure 1 (data audit) needs --occ and --env (the raw files) and was skipped")
+
+
 def build_parser():
     """Create the argument parser with one sub-command per pipeline stage."""
     ap = argparse.ArgumentParser(prog="occenv", description=__doc__,
@@ -135,6 +148,21 @@ def build_parser():
                    help="largest occupancy sample size (smaller sizes are also run)")
     p.add_argument("--out", default="results/performance.txt")
     p.set_defaults(func=cmd_benchmark)
+
+    p = sub.add_parser("figures", help="regenerate every report figure")
+    p.add_argument("--dir", default="data/processed")
+    p.add_argument("--occ", help="raw occupancy CSV (for figure 1)")
+    p.add_argument("--env", help="raw env CSV (for figure 1)")
+    p.add_argument("--out", default="report/figures")
+    p.add_argument("--sensor", default="869")
+    p.add_argument("--spaces", nargs="+", default=["0f3f37f8", "941f0352"])
+    p.add_argument("--control", default="326")
+    p.add_argument("--no-control", dest="no_control", action="store_true")
+    p.add_argument("--mapping-end", dest="mapping_end", default="2024-05-14")
+    p.add_argument("--mapping-exclude", dest="mapping_exclude", nargs="*", default=["3e5a14df"])
+    p.add_argument("--thr", nargs="+", type=float, default=[1.0, 2.0])
+    p.add_argument("--n-boot", dest="n_boot", type=int, default=1000)
+    p.set_defaults(func=cmd_figures)
     return ap
 
 
