@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from occenv.modelling import (ScheduleLookup, build_dataset, make_models, metrics,
+from occenv.modelling import (PAIRS, ScheduleLookup, build_dataset, make_models, metrics,
                               paired_auc_diff, run_experiment, split_chronological)
 
 SPACES = ["aaaaaaaa", "bbbbbbbb"]
@@ -96,7 +96,7 @@ def test_run_experiment_outputs(experiment):
     assert set(experiment["test"]["model"]) == names
     assert set(experiment["cv"]["model"]) == names
     assert experiment["test"]["auc"].between(0.5, 1.0).all()
-    assert len(experiment["paired"]) == 5
+    assert len(experiment["paired"]) == len(PAIRS) == 7
     assert (experiment["paired"]["lo"] <= experiment["paired"]["hi"]).all()
     assert "co2_ppm" in experiment["importance"].index
     assert "HELD-OUT TEST" in experiment["report"].text()

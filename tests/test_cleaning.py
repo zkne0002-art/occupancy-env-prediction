@@ -5,7 +5,7 @@ import pytest
 from synthetic import (DEAD_SENSOR, GOOD_SENSOR, make_env_json, write_env_csv,
                        write_occ_csv)
 
-from occenv.cleaning import clean_env, clean_occupancy, parse_env_json
+from occenv.cleaning import clean_env, clean_occupancy, parse_env_json, parse_timestamps
 
 
 def at(table, ts):
@@ -113,3 +113,40 @@ def test_clean_occupancy_rejects_missing_columns(tmp_path):
     pd.DataFrame({"a": [1]}).to_csv(tmp_path / "x.csv", index=False)
     with pytest.raises(ValueError, match="missing required"):
         clean_occupancy(str(tmp_path / "x.csv"))
+
+
+# ---------- optimisations must not change results ----------
+def slow_parse(values):
+    return pd.to_datetime(pd.Series(values), utc=True, errors="coerce")
+
+
+def test_parse_timestamps_fast_path_matches_pandas():
+    vals = ["2024-01-01 21:00:00+11", "2024-06-30 23:59:59+10", "2024-01-01 00:00:00+00",
+            "2024-03-05 08:15:30-05", "2023-11-23 13:36:52+11"]
+    fast, slow = parse_timestamps(pd.Series(vals)), slow_parse(vals)
+    assert (fast == slow).all()
+    assert str(fast.dt.tz) == "UTC"
+    assert fast.iloc[0] == pd.Timestamp("2024-01-01 10:00", tz="UTC")     # 21:00+11 = 10:00 UTC
+
+
+def test_parse_timestamps_falls_back_for_other_formats():
+    for vals in (["2024-01-01 10:00:00.5+10", "2024-01-01 10:00:01.5+10"],       # fractional seconds
+                 ["2024-01-01 10:00:00+05:30", "2024-01-02 10:00:00+05:30"],     # minute offset
+                 ["2024-01-01 10:00:00+10", "not a date"],                       # bad text -> NaT
+                 ["2024-01-01 10:00:00+10", None]):                              # missing value
+        fast, slow = parse_timestamps(pd.Series(vals)), slow_parse(vals)
+        assert fast.isna().tolist() == slow.isna().tolist()
+        assert (fast.dropna() == slow.dropna()).all()
+
+
+def test_parse_timestamps_keeps_index_and_handles_empty():
+    s = pd.Series(["2024-01-01 10:00:00+10", "2024-01-01 11:00:00+10"], index=[7, 9])
+    assert parse_timestamps(s).index.tolist() == [7, 9]
+    assert len(parse_timestamps(pd.Series([], dtype=str))) == 0
+
+
+def test_dedupe_first_gives_identical_output(raw):
+    base, st_base = clean_env(raw["env"], dedupe_first=False)
+    fast, st_fast = clean_env(raw["env"], dedupe_first=True)
+    pd.testing.assert_frame_equal(base, fast)
+    assert st_base == st_fast

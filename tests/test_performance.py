@@ -29,6 +29,12 @@ def test_measure_returns_result_time_and_memory():
     assert len(result) == 100_000 and secs >= 0 and peak_mb > 0.1
 
 
+def test_measure_can_skip_the_memory_run():
+    calls = []
+    result, secs, peak = measure(lambda: calls.append(1) or 5, memory=False)
+    assert result == 5 and len(calls) == 1 and peak != peak      # runs once; memory is NaN
+
+
 def test_profile_text_lists_functions():
     assert "function calls" in profile_text(sum, range(1000), top=3)
 
@@ -49,4 +55,7 @@ def test_cli_benchmark_runs_and_saves(raw, tmp_path):
     assert main(["benchmark", "--occ", raw["occ"], "--env", raw["env"], "--nrows", "2000",
                  "--out", str(out)]) == 0
     text = out.read_text()
-    assert "identical duplicate counts confirmed" in text and "Analytic cost estimates" in text
+    assert "TIMESTAMP PARSING" in text and "ENV CLEANING" in text and "Analytic cost estimates" in text
+    sections_1_2 = text.split("3. ENV CLEANING")[0]        # the only booleans here are 'identical'
+    assert "True" in sections_1_2 and "False" not in sections_1_2
+    assert "tables identical: True | stats identical: True" in text

@@ -22,13 +22,13 @@ Forward-chaining CV on TRAIN only (ROC-AUC mean +- sd over folds):
 HELD-OUT TEST (fit on full train, scored once):
            model   auc  bal_acc    f1  brier  fit_s  predict_s
  schedule_lookup 0.832    0.739 0.634  0.210  0.001      0.001
- logreg_schedule 0.832    0.739 0.634  0.204  0.015      0.003
+ logreg_schedule 0.832    0.739 0.634  0.204  0.018      0.002
 logreg_sched+env 0.906    0.798 0.698  0.156  0.057      0.006
-    hgb_schedule 0.834    0.737 0.631  0.208  0.161      0.017
-    hgb_env_only 0.883    0.782 0.684  0.156  0.196      0.015
-   hgb_sched+env 0.897    0.788 0.688  0.151  0.180      0.017
-logreg_sched+co2 0.905    0.800 0.700  0.153  0.044      0.004
-   hgb_sched+co2 0.893    0.773 0.670  0.157  0.196      0.014
+    hgb_schedule 0.834    0.737 0.631  0.208  0.181      0.025
+    hgb_env_only 0.883    0.782 0.684  0.156  0.168      0.014
+   hgb_sched+env 0.897    0.788 0.688  0.151  0.198      0.027
+logreg_sched+co2 0.905    0.800 0.700  0.153  0.038      0.005
+   hgb_sched+co2 0.893    0.773 0.670  0.157  0.162      0.025
 
 Paired test-AUC differences, A - B (95% bootstrap CI over 31 test days; a CI that includes 0 means no reliable difference):
   hgb_schedule       - schedule_lookup : +0.002  [-0.004, +0.007]
@@ -36,6 +36,8 @@ Paired test-AUC differences, A - B (95% bootstrap CI over 31 test days; a CI tha
   logreg_sched+co2   - logreg_schedule : +0.073  [+0.034, +0.107]
   hgb_sched+env      - hgb_schedule    : +0.063  [+0.012, +0.106]
   hgb_sched+co2      - hgb_schedule    : +0.059  [+0.015, +0.100]
+  hgb_sched+co2      - logreg_sched+co2: -0.012  [-0.025, -0.000]
+  hgb_sched+env      - logreg_sched+env: -0.009  [-0.030, +0.008]
 
 Permutation importance on test (drop in AUC), hgb_sched+env:
 hour              0.119

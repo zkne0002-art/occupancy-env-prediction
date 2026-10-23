@@ -13,7 +13,15 @@ Expected (and, on a 1M-row synthetic test, observed) trade-off: the improvement 
 MEMORY (about 4x less at 1M rows, and the gap grows with n). Run time is similar for both
 because reading and parsing the CSV dominates; the cProfile output in the benchmark shows this.
 
-Both must return identical counts (checked by the tests and by the benchmark itself). Hash
+The cProfile output showed the real bottlenecks, which are also compared against their baselines:
+
+* TIMESTAMP PARSING: `pandas.to_datetime` on strings ending in a two-digit offset such as `+11`
+  falls back to a slow per-row parser (76 % of `clean_occupancy` time). `occenv.cleaning.parse_timestamps`
+  gives identical values via a fixed-width fast path.
+* ENV CLEANING: parsing JSON for rows that are then discarded as duplicates (76 % of rows).
+  `clean_env(dedupe_first=True)` skips them; `dedupe_first=False` is the original order.
+
+Both versions of every pair must return identical results (checked by the tests and by the benchmark itself). Hash
 collisions could in principle make the fast count slightly too high; for n = 9e6 rows and 64-bit
 hashes the expected number of collisions is about n^2 / 2^65, i.e. about 2e-6.
 
@@ -37,18 +45,22 @@ from .reporting import TextReport
 KEY_COLS = ["floorspaceid", "collecteddate", "occupancystatus"]
 
 
-def measure(fn, *args, **kwargs):
-    """Run ``fn`` twice: once untraced for the time, once under ``tracemalloc`` for peak memory.
+def measure(fn, *args, memory=True, **kwargs):
+    """Run ``fn`` and report its time and (optionally) peak memory.
 
-    ``tracemalloc`` slows code down, so timing and memory are taken from separate runs.
+    Time comes from an untraced run; peak memory from a second run under ``tracemalloc``
+    (which slows code down, so the two are never combined). Pass ``memory=False`` to skip the
+    second run for slow functions.
 
     Returns:
-        ``(result, seconds, peak_megabytes)``. Peak memory counts Python and NumPy/pandas
-        allocations made during the call.
+        ``(result, seconds, peak_megabytes)``; peak memory is NaN if ``memory`` is False. Peak
+        memory counts Python and NumPy/pandas allocations made during the call.
     """
     t0 = time.perf_counter()
     result = fn(*args, **kwargs)
     seconds = time.perf_counter() - t0
+    if not memory:
+        return result, seconds, float("nan")
     tracemalloc.start()
     fn(*args, **kwargs)
     _, peak = tracemalloc.get_traced_memory()
@@ -151,35 +163,52 @@ def _sample_csv(path, nrows, directory):
 def run_benchmark(occ_path, env_path, nrows=1_000_000, report=None):
     """Run the whole performance study and log it to ``report``.
 
-    1. Baseline vs improved duplicate counting at three input sizes (scalability), with an
-       equality check on the results.
-    2. ``cProfile`` of ``clean_occupancy`` (on the first ``nrows`` rows) and ``clean_env`` to
-       show where cleaning time actually goes.
-    3. Analytic cost estimates for the model families (see `estimate_costs`).
+    1. Duplicate counting, baseline vs improved, at three input sizes (time and peak memory).
+    2. Timestamp parsing, baseline (`pandas.to_datetime`) vs `parse_timestamps`.
+    3. Env cleaning, parse-everything-first vs `dedupe_first`.
+    4. ``cProfile`` of the IMPROVED `clean_occupancy` and `clean_env`, to show the new hotspots.
+    5. Analytic cost estimates for the model families (see `estimate_costs`).
 
-    Raises:
-        AssertionError: If the baseline and improved counts ever disagree.
+    Every pair is checked for identical results and the outcome is logged (not asserted), so a
+    mismatch is visible in the report instead of stopping the run.
     """
     report = report or TextReport()
     log = report.log
+    fmt = lambda x: f"{x:.2f}"
+
     log("=" * 60, "\n1. DUPLICATE COUNTING: baseline (set of strings) vs improved (vectorised hashes)")
     rows = []
     for n in sorted({max(nrows // 4, 1), max(nrows // 2, 1), nrows}):
         (n_b, d_b), t_b, m_b = measure(count_duplicates_baseline, occ_path, n)
         (n_f, d_f), t_f, m_f = measure(count_duplicates_fast, occ_path, n)
-        assert (n_b, d_b) == (n_f, d_f), f"results differ: baseline {(n_b, d_b)} vs fast {(n_f, d_f)}"
         rows.append({"rows": n_b, "duplicates": d_b, "base_s": t_b, "fast_s": t_f,
-                     "speedup": t_b / t_f, "base_MB": m_b, "fast_MB": m_f,
-                     "mem_ratio": m_b / m_f})
-    log(pd.DataFrame(rows).to_string(index=False, float_format=lambda x: f"{x:.2f}"))
-    log("(identical duplicate counts confirmed at every size)")
+                     "speedup": t_b / t_f, "base_MB": m_b, "fast_MB": m_f, "mem_ratio": m_b / m_f,
+                     "identical": (n_b, d_b) == (n_f, d_f)})
+    log(pd.DataFrame(rows).to_string(index=False, float_format=fmt))
+
+    log("\n" + "=" * 60 + "\n2. TIMESTAMP PARSING: pandas.to_datetime vs parse_timestamps")
+    ts = pd.read_csv(occ_path, usecols=["collecteddate"], nrows=nrows, dtype=str)["collecteddate"]
+    rows = []
+    for n in sorted({max(nrows // 4, 1), max(nrows // 2, 1)}):
+        sub = ts.iloc[:n]
+        slow, t_s, m_s = measure(lambda x: pd.to_datetime(x, utc=True, errors="coerce"), sub)
+        fast, t_f, m_f = measure(cleaning.parse_timestamps, sub)
+        rows.append({"rows": n, "base_s": t_s, "fast_s": t_f, "speedup": t_s / t_f,
+                     "base_MB": m_s, "fast_MB": m_f, "identical": bool((slow == fast).all())})
+    log(pd.DataFrame(rows).to_string(index=False, float_format=fmt))
+
+    log("\n" + "=" * 60 + "\n3. ENV CLEANING: parse every row first vs dedupe_first (time only)")
+    (tab_b, st_b), t_b, _ = measure(cleaning.clean_env, env_path, memory=False, dedupe_first=False)
+    (tab_f, st_f), t_f, _ = measure(cleaning.clean_env, env_path, memory=False)
+    log(f"parse-all-first: {t_b:.2f} s | dedupe_first: {t_f:.2f} s | speedup {t_b / t_f:.2f}x | "
+        f"tables identical: {tab_b.equals(tab_f)} | stats identical: {st_b == st_f}")
 
     with tempfile.TemporaryDirectory() as tmp:
-        log("\n" + "=" * 60 + f"\n2. cProfile of clean_occupancy on the first {nrows} rows")
+        log("\n" + "=" * 60 + f"\n4a. cProfile of IMPROVED clean_occupancy, first {nrows} rows")
         log(profile_text(cleaning.clean_occupancy, _sample_csv(occ_path, nrows, tmp)))
-    log("=" * 60, "\n3. cProfile of clean_env (whole env file)")
+    log("=" * 60, "\n4b. cProfile of IMPROVED clean_env (whole env file)")
     log(profile_text(cleaning.clean_env, env_path))
 
-    log("=" * 60, "\n4. Analytic cost estimates (n_train=8542, n_test=3715 as in the thr=1 run)")
+    log("=" * 60, "\n5. Analytic cost estimates (n_train=8542, n_test=3715 as in the thr=1 run)")
     log(estimate_costs(8542, 3715).to_string(index=False, float_format=lambda x: f"{x:,.2f}"))
     return report

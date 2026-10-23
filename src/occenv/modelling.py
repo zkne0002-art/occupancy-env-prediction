@@ -35,7 +35,9 @@ from .reporting import TextReport
 GAP_BINS = 144   # 1 day between train and test / CV folds
 PAIRS = [("hgb_schedule", "schedule_lookup"), ("logreg_sched+env", "logreg_schedule"),
          ("logreg_sched+co2", "logreg_schedule"), ("hgb_sched+env", "hgb_schedule"),
-         ("hgb_sched+co2", "hgb_schedule")]
+         ("hgb_sched+co2", "hgb_schedule"),
+         # is the simpler model good enough? (model selection evidence)
+         ("hgb_sched+co2", "logreg_sched+co2"), ("hgb_sched+env", "logreg_sched+env")]
 
 
 class ScheduleLookup(BaseEstimator, ClassifierMixin):
