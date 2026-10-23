@@ -20,6 +20,7 @@ import matplotlib
 matplotlib.use("Agg")                      # no display needed
 import matplotlib.dates as mdates          # noqa: E402
 import matplotlib.pyplot as plt            # noqa: E402
+from matplotlib.patches import Patch       # noqa: E402
 import numpy as np                         # noqa: E402
 import pandas as pd                        # noqa: E402
 
@@ -84,7 +85,9 @@ def fig_data_audit(audit, path):
     ax[0].barh(["env rows"], [uniq], color=BLUE, label=f"unique readings: {uniq:,}")
     ax[0].barh(["env rows"], [raw - uniq], left=[uniq], color=GREY,
                label=f"repeats/unusable: {raw - uniq:,} ({100 * (raw - uniq) / raw:.0f}%)")
-    ax[0].set(title="A. Env rows in the raw file", xlabel="rows")
+    ax[0].set(title="A. Env rows in the raw file", xlabel="rows (thousands)")
+    ax[0].xaxis.set_major_locator(plt.MaxNLocator(5))
+    ax[0].xaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f"{x / 1000:.0f}"))
     ax[0].legend(loc="upper center", bbox_to_anchor=(0.5, -0.25), frameon=False)
     per = st["unique_per_sensor"]
     sensors = sorted(per)
@@ -129,10 +132,13 @@ def fig_availability(env, occ, path, test_window=None):
     fig, ax = plt.subplots(figsize=(9, 0.42 * len(rows) + 1.3))
     for i, (label, t0, t1, colour) in enumerate(rows):
         ax.barh(i, _num(t1) - _num(t0), left=_num(t0), color=colour, height=0.6)
+    handles = [Patch(color=BLUE, label="environmental sensor"),
+               Patch(color=ORANGE, label="occupancy space")]
     if test_window is not None:
-        ax.axvspan(_num(test_window[0]), _num(test_window[1]), color=RED, alpha=0.2,
-                   label="main experiment: test period")
-        ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.22), frameon=False)
+        ax.axvspan(_num(test_window[0]), _num(test_window[1]), color=RED, alpha=0.2)
+        handles.append(Patch(color=RED, alpha=0.2, label="main experiment: test period"))
+    ax.legend(handles=handles, loc="upper center", bbox_to_anchor=(0.5, -0.22), ncol=3,
+              frameon=False)
     ax.set_yticks(range(len(rows)), [r[0] for r in rows])
     ax.invert_yaxis()
     locator = mdates.AutoDateLocator()
@@ -198,16 +204,25 @@ def fig_co2_vs_headcount(df_main, path, label_main, df_control=None, label_contr
     panels = [(df_main, f"B. {label_main}: residuals")]
     if df_control is not None:
         panels.append((df_control, f"C. {label_control}: residuals"))
-    for j, (df, title) in enumerate(panels):
+    resids = [deseason(df.dropna(subset=["co2_ppm", "zone_hc"])[["co2_ppm", "zone_hc"]])
+              for df, _ in panels]
+    lo = min(r["co2_ppm"].quantile(0.005) for r in resids)      # shared range: 0.5th-99.5th percentile
+    hi = max(r["co2_ppm"].quantile(0.995) for r in resids)
+    pad = 0.05 * (hi - lo)
+    lo, hi = lo - pad, hi + pad
+    for j, ((df, title), res) in enumerate(zip(panels, resids)):
         a = fig.add_subplot(gs[1, j])
-        dd = df.dropna(subset=["co2_ppm", "zone_hc"])
-        res = deseason(dd[["co2_ppm", "zone_hc"]])
-        a.hexbin(res["zone_hc"], res["co2_ppm"], gridsize=30, mincnt=1, bins="log", cmap="Blues")
-        r = res["co2_ppm"].corr(res["zone_hc"])
+        keep = res["co2_ppm"].between(lo, hi)
+        a.hexbin(res.loc[keep, "zone_hc"], res.loc[keep, "co2_ppm"], gridsize=30, mincnt=1,
+                 bins="log", cmap="Blues")
+        r = res["co2_ppm"].corr(res["zone_hc"])                 # r uses ALL points, drawn or not
         a.set(title=f"{title} (r = {r:.2f})", xlabel="zone headcount minus weekly profile",
-              ylabel="CO2 minus weekly profile (ppm)")
+              ylabel="CO2 minus weekly profile (ppm)", ylim=(lo, hi))
         a.axhline(0, color=GREY, lw=0.5)
         a.axvline(0, color=GREY, lw=0.5)
+        if (~keep).sum():
+            a.text(0.98, 0.02, f"{int((~keep).sum())} extreme points not drawn (included in r)",
+                   transform=a.transAxes, ha="right", va="bottom", fontsize=7)
     return _save(fig, path)
 
 
