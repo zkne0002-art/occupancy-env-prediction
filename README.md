@@ -141,7 +141,7 @@ docs/         generated HTML documentation
 Claude (Anthropic) was used throughout this project for code drafting, analysis design, debugging and
 report drafting. All AI output was checked by running the test suite, comparing optimised code with its
 baseline on the real data, and using a negative-control sensor. The full disclosure and reflection are in
-the written report. *(Add any details you want recorded here.)*
+the written report. 
 
 ## Licence
 
