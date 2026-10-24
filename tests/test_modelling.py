@@ -1,4 +1,6 @@
 """Tests for occenv.modelling: features, split, metrics, bootstrap and the full experiment."""
+import warnings
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -30,7 +32,16 @@ def test_metrics_perfect_predictions():
 
 
 def test_metrics_single_class_gives_nan_auc():
-    assert np.isnan(metrics([1, 1, 1], [0.6, 0.7, 0.8])["auc"])
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", UserWarning)       # sklearn warns about the single class
+        assert np.isnan(metrics([1, 1, 1], [0.6, 0.7, 0.8])["auc"])
+
+
+def test_gradient_boosting_never_stops_early():
+    """All HGB models must use the same fixed 200 iterations, whatever the training-set size."""
+    for name, (est, _) in make_models().items():
+        if name.startswith("hgb"):
+            assert est.early_stopping is False and est.max_iter == 200
 
 
 def test_paired_auc_diff_identical_models_is_zero():

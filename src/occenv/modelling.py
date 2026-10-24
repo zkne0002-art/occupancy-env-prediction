@@ -142,8 +142,12 @@ def describe(df, per_space, thr, report):
 def make_models():
     """Return ``{name: (estimator, feature columns)}`` for every model compared."""
     def hgb():
+        # early_stopping=False: scikit-learn's default ('auto') switches early stopping on for
+        # training sets above 10,000 rows, using a RANDOM validation split. That would train the
+        # larger control dataset differently from the main experiment (and leak within the
+        # training period), so every model uses exactly 200 boosting iterations.
         return HistGradientBoostingClassifier(max_depth=3, learning_rate=0.05, max_iter=200,
-                                              random_state=0)
+                                              early_stopping=False, random_state=0)
     how = ("how", OneHotEncoder(handle_unknown="ignore"), ["how"])
     lr_sched = ColumnTransformer([how])
     lr_all = ColumnTransformer([how, ("env", StandardScaler(), ENV_ALL)])
