@@ -14,39 +14,39 @@ Forward-chaining CV on TRAIN only (ROC-AUC mean +- sd over folds):
   logreg_schedule    0.939 +- 0.022  (folds used: 4)
   logreg_sched+env   0.932 +- 0.019  (folds used: 4)
   hgb_schedule       0.943 +- 0.023  (folds used: 4)
-  hgb_env_only       0.766 +- 0.020  (folds used: 4)
-  hgb_sched+env      0.935 +- 0.022  (folds used: 4)
+  hgb_env_only       0.766 +- 0.019  (folds used: 4)
+  hgb_sched+env      0.936 +- 0.023  (folds used: 4)
   logreg_sched+co2   0.935 +- 0.015  (folds used: 4)
-  hgb_sched+co2      0.935 +- 0.019  (folds used: 4)
+  hgb_sched+co2      0.936 +- 0.019  (folds used: 4)
 
 HELD-OUT TEST (fit on full train, scored once):
            model   auc  bal_acc    f1  brier  fit_s  predict_s
  schedule_lookup 0.916    0.839 0.799  0.110  0.003      0.001
- logreg_schedule 0.916    0.835 0.794  0.111  0.042      0.003
-logreg_sched+env 0.907    0.825 0.783  0.116  0.106      0.007
-    hgb_schedule 0.918    0.827 0.785  0.109  0.253      0.021
-    hgb_env_only 0.726    0.609 0.439  0.209  0.278      0.027
-   hgb_sched+env 0.910    0.828 0.786  0.113  0.326      0.028
-logreg_sched+co2 0.908    0.817 0.772  0.117  0.085      0.006
-   hgb_sched+co2 0.911    0.816 0.770  0.115  0.315      0.027
+ logreg_schedule 0.916    0.835 0.794  0.111  0.037      0.003
+logreg_sched+env 0.907    0.825 0.783  0.116  0.111      0.009
+    hgb_schedule 0.919    0.831 0.791  0.109  0.263      0.041
+    hgb_env_only 0.726    0.612 0.443  0.209  0.430      0.028
+   hgb_sched+env 0.911    0.828 0.785  0.113  0.264      0.026
+logreg_sched+co2 0.908    0.817 0.772  0.117  0.078      0.006
+   hgb_sched+co2 0.912    0.816 0.770  0.115  0.249      0.036
 
 Paired test-AUC differences, A - B (95% bootstrap CI over 63 test days; a CI that includes 0 means no reliable difference):
-  hgb_schedule       - schedule_lookup : +0.002  [-0.001, +0.006]
+  hgb_schedule       - schedule_lookup : +0.003  [-0.001, +0.006]
   logreg_sched+env   - logreg_schedule : -0.009  [-0.017, -0.002]
   logreg_sched+co2   - logreg_schedule : -0.009  [-0.016, -0.001]
-  hgb_sched+env      - hgb_schedule    : -0.008  [-0.017, -0.001]
+  hgb_sched+env      - hgb_schedule    : -0.008  [-0.017, +0.001]
   hgb_sched+co2      - hgb_schedule    : -0.007  [-0.013, -0.002]
   hgb_sched+co2      - logreg_sched+co2: +0.004  [-0.003, +0.010]
-  hgb_sched+env      - logreg_sched+env: +0.003  [-0.005, +0.011]
+  hgb_sched+env      - logreg_sched+env: +0.004  [-0.004, +0.012]
 
 Permutation importance on test (drop in AUC), hgb_sched+env:
-hour              0.318
-dow               0.096
+hour              0.319
+dow               0.097
 temp_c            0.005
 co2_above_base    0.001
 pm2_5             0.000
 temp_d30         -0.000
 co2_d30          -0.000
-co2_roll1h       -0.001
+co2_roll1h       -0.000
 co2_ppm          -0.001
 humidity_pct     -0.004
